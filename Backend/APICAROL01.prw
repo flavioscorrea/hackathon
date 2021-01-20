@@ -3,17 +3,21 @@
 #INCLUDE "RESTFUL.CH"
 #INCLUDE "FILEIO.CH"
 
+#DEFINE PAGESIZE_DEFAULT 5
+#DEFINE PAGE_DEFAULT     1
+
+
 Function APICAROL01()
 Return .T.
 
 WSRESTFUL IntegrationCarolClockin DESCRIPTION "Integração com Carol Clock in"
 
-	WSDATA WsNull		As String Optional
-	WSDATA type			As String Optional
 	WSDATA filter		As String Optional
-	WSDATA page       	As String Optional
-	WSDATA pageSize   	As String Optional	
-	
+	WSDATA companyId	 As String
+	WSDATA branchId	     As String
+	WSDATA page			 As Integer Optional
+	WSDATA pageSize		 As Integer Optional
+
 	WSMETHOD GET fConfigured ;
 	 DESCRIPTION "Sistema está configurado para a integração?";
 	 WSSYNTAX "/config/configured" ;
@@ -30,6 +34,12 @@ WSRESTFUL IntegrationCarolClockin DESCRIPTION "Integração com Carol Clock in"
 	 DESCRIPTION "Salva configurações";
 	 WSSYNTAX "/config" ;
 	 PATH "/config" ; 
+	 PRODUCES 'application/json;charset=utf-8'
+
+	WSMETHOD GET fDevices ;
+	 DESCRIPTION "Retorna lista de dispositivos cadastrados na Carol Clock in ";
+	 WSSYNTAX "/devices" ;
+	 PATH "/devices" ; 
 	 PRODUCES 'application/json;charset=utf-8'
 	
 END WSRESTFUL
@@ -70,7 +80,6 @@ Self:SetResponse(cJson)
 
 Return( .t. )
 
-
 WSMETHOD PUT fSaveConfig WSREST IntegrationCarolClockin
 
 Local cJsonObj   := "JsonObject():New()"
@@ -97,4 +106,55 @@ PutMv("MV_APICLOA", oItem["ApiToken"])
 PutMv("MV_APICLOB", oItem["MV_APICLOB"])
 cJson := FWJsonSerialize(oItem, .F., .F., .T.)
 ::SetResponse(cJson)
+
+Return( .t. )
+
+WSMETHOD GET fDevices WSRECEIVE page, pageSize, filter WSREST IntegrationCarolClockin
+Local cJsonObj   := "JsonObject():New()"
+Local oItem      := &cJsonObj
+Local aItem		 := {}
+Local oRet		 := &cJsonObj
+Local nI 		 := 0
+Local adados 	 := {}
+Local aDisp  	 := {}
+Local nInicio	 := 1
+Local nFim		 := 0
+Local nTotalDisp := 0
+
+Private aLog		:= { {} }
+Private lApiToken	:= .F.
+Private lGeraTokn	:= .F.
+Private lTemRR1		:= .F.
+
+DEFAULT Self:page 		:= PAGE_DEFAULT
+DEFAULT Self:pageSize 	:= PAGESIZE_DEFAULT
+
+aDisps := fDispBusc(Self:Filter)
+nTotalDisp := Len(aDisps[3])
+
+If Empty(nTotalDisp)
+	SetRestFault(404,EncodeUTF8(NoAcento(OemToAnsi("Dispositivos não cadastrados"))))
+	Return .F.
+EndIf
+
+If Self:page > 1
+	nInicio := Min((Self:page * Self:pageSize) + 1 , nTotalDisp )
+EndIf
+nFim := Min(nTotalDisp,(nInicio + Self:pageSize) - 1 )
+
+For nI := nInicio to nFim
+	aDados := fMarcBusc(aDisps[3][nI][1],,,,)
+	oItem  := &cJsonObj
+	oItem["deviceCode"] := aDisps[3][nI][1]
+	oItem["deviceDescription"] := aDisps[3][nI][2]
+	oItem["count"] := len(adados[3])
+	aadd(aItem,oItem)
+Next	
+
+oRet["hasNext"] := nFim < nTotalDisp
+oRet["items"] := aItem
+
+cJson := FWJsonSerialize(oRet, .F., .F., .T.)
+Self:SetResponse(cJson)
+
 Return( .t. )
