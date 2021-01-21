@@ -10,7 +10,7 @@
 Function APICAROL01()
 Return .T.
 
-WSRESTFUL IntegrationCarolClockin DESCRIPTION "IntegraÁ„o com Carol Clock in"
+WSRESTFUL IntegrationCarolClockin DESCRIPTION "Integra√ß√£o com Carol Clock in"
 
 	WSDATA filter		As String Optional
 	WSDATA companyId	 As String
@@ -19,29 +19,35 @@ WSRESTFUL IntegrationCarolClockin DESCRIPTION "IntegraÁ„o com Carol Clock in"
 	WSDATA pageSize		 As Integer Optional
 
 	WSMETHOD GET fConfigured ;
-	 DESCRIPTION "Sistema est· configurado para a integraÁ„o?";
+	 DESCRIPTION "Sistema est√° configurado para a integra√ß√£o?";
 	 WSSYNTAX "/config/configured" ;
 	 PATH "/config/configured" ; 
 	 PRODUCES 'application/json;charset=utf-8'
 
 	WSMETHOD GET fParameters ;
-	 DESCRIPTION "Retorna parametros de integraÁ„o";
+	 DESCRIPTION "Retorna parametros de integra√ß√£o";
 	 WSSYNTAX "/config" ;
 	 PATH "/config" ; 
 	 PRODUCES 'application/json;charset=utf-8'
 
 	WSMETHOD PUT fSaveConfig ;
-	 DESCRIPTION "Salva configuraÁıes";
+	 DESCRIPTION "Salva configura√ß√µes";
 	 WSSYNTAX "/config" ;
 	 PATH "/config" ; 
 	 PRODUCES 'application/json;charset=utf-8'
 
 	WSMETHOD GET fDevices ;
-	 DESCRIPTION "Retorna lista de dispositivos cadastrados na Carol Clock in ";
+	 DESCRIPTION "Retorna lista de dispositivos cadastrados na Carol Clock In ";
 	 WSSYNTAX "/devices" ;
 	 PATH "/devices" ; 
 	 PRODUCES 'application/json;charset=utf-8'
-	
+
+	WSMETHOD POST fLoadMarkings ;
+	 DESCRIPTION "Efetua carga das marca√ß√µes na Carol Clock In por dispositivo";
+	 WSSYNTAX "/loadMarkings" ;
+	 PATH "/loadMarkings" ; 
+	 PRODUCES 'application/json;charset=utf-8'
+
 END WSRESTFUL
 
 WSMETHOD GET fConfigured WSREST IntegrationCarolClockin
@@ -88,7 +94,7 @@ Local oItem      := &cJsonObj
 oItem:FromJson(cBody)
 
 If oItem != Nil  .and. Len(oItem:GetNames()) == 0  
-	SetRestFault(400,EncodeUTF8(NoAcento(OemToAnsi("Par‚metros inv·lidos"))))
+	SetRestFault(400,EncodeUTF8(NoAcento(OemToAnsi("Par√¢metros inv√°lidos"))))
 	return (.F.)
 EndIf
 
@@ -116,7 +122,7 @@ Local aItem		 := {}
 Local oRet		 := &cJsonObj
 Local nI 		 := 0
 Local adados 	 := {}
-Local aDisp  	 := {}
+Local aDisps  	 := {}
 Local nInicio	 := 1
 Local nFim		 := 0
 Local nTotalDisp := 0
@@ -133,7 +139,7 @@ aDisps := fDispBusc(Self:Filter)
 nTotalDisp := Len(aDisps[3])
 
 If Empty(nTotalDisp)
-	SetRestFault(404,EncodeUTF8(NoAcento(OemToAnsi("Dispositivos n„o cadastrados"))))
+	SetRestFault(404,EncodeUTF8(NoAcento(OemToAnsi("Dispositivos n√£o cadastrados"))))
 	Return .F.
 EndIf
 
@@ -153,6 +159,56 @@ Next
 
 oRet["hasNext"] := nFim < nTotalDisp
 oRet["items"] := aItem
+
+cJson := FWJsonSerialize(oRet, .F., .F., .T.)
+Self:SetResponse(cJson)
+
+Return( .t. )
+
+WSMETHOD POST fLoadMarking WSREST IntegrationCarolClockin
+
+Local aDados		:= {}
+Local aDisps		:= {}
+Local aResp			:= {}
+Local cBody	    	:= self:GetContent()
+Local cJson	    	:= ""
+Local nI			:= 0
+Local oParams   	:= JsonObject():New()
+Local oResp     	:= JsonObject():New()
+Local oRet     		:= JsonObject():New()
+
+Private lApiToken	:= .F.
+Private lTemRR1		:= AliasInDic("RR1")
+
+oParams:FromJSON( cBody )
+
+If Empty( oParams["devices"] )
+	SetRestFault(404,EncodeUTF8(NoAcento(OemToAnsi("Dispositivos n√£o informados"))))
+	Return .F.
+EndIf
+
+aDisps := oParams["devices"]
+
+For nI := 1 to Len(aDisps)
+	cTempDisp := aDisps[nI]["deviceCode"]
+	aDados := fMarcBusc(cTempDisp,,,.F.,)
+	If aDados[1] .AND. Len(aDados[3]) > 0		
+		fProcessa( cTempDisp, aDados[3], .T., .F. )
+		oResp     	:= JsonObject():New()
+		oResp["deviceCode"] 	:= cTempDisp
+		oResp["message"] 		:= "Importado"
+		oResp["status"]			:= "200"
+		aAdd( aResp, oResp )
+	Else
+		oResp     	:= JsonObject():New()
+		oResp["deviceCode"] 	:= cTempDisp
+		oResp["message"] 		:= "Falha na importa√ß√£o ou sem marca√ß√µes para importar"
+		oResp["status"]			:= "400"
+		aAdd( aResp, oResp )
+	EndIf
+Next	
+
+oRet["devices"] := aResp
 
 cJson := FWJsonSerialize(oRet, .F., .F., .T.)
 Self:SetResponse(cJson)
