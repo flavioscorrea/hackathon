@@ -1,0 +1,74 @@
+<div class="po-wrapper">
+    <po-toolbar p-title="Integra&ccedil;&atilde;o - Carol Clock In"></po-toolbar>
+    
+    <po-page-default>
+      
+      <po-container
+        [p-height]="urlendpoint"
+        [p-no-border]="properties.includes('noBorder')"
+        [p-no-padding]="properties.includes('noPadding')"
+        [p-no-shadow]="properties.includes('noShadow')"
+      >
+  
+      <form #f="ngForm">
+        <div class="po-row">
+          <po-input class="po-md-6" name="urlendpoint" [(ngModel)]="urlendpoint" p-label="Endere&ccedil;o de acesso ao EndPoint"> </po-input>
+  
+          <po-input class="po-md-6" name="pathendpoint" [(ngModel)]="pathendpoint" p-label="Path de acesso ao EndPoint"> </po-input>
+          
+        </div>
+  
+        <div class="po-row">
+          <po-input class="po-md-6" name="idacesso" [(ngModel)]="idacesso" p-label="ID de conex&atilde;o de acesso"> </po-input>
+  
+          <po-input class="po-md-6" name="domacesso" [(ngModel)]="domacesso" p-label="Dominio de acesso EndPoint"> </po-input>
+          
+        </div>
+  
+        <div class="po-row">
+          <po-input class="po-md-6" name="userendpoint" [(ngModel)]="userendpoint" p-label="Usu&aacute;rio de acesso ao EndPoint"> </po-input>
+  
+          <po-input class="po-md-6" name="senhaendpoint" [(ngModel)]="senhaendpoint" p-label="Senha de acesso ao EndPoint"> </po-input>
+          
+        </div>
+  
+        <div class="po-row">
+          <po-input class="po-md-6" name="pathdevice" [(ngModel)]="pathdevice" p-label="Path do EndPoint deviceList"> </po-input>
+  
+          <po-input class="po-md-6" name="pathclockin" [(ngModel)]="pathclockin" p-label="Path do EndPoint clockinrecordList"> </po-input>
+          
+        </div>
+  
+        <div class="po-row">
+          <po-input class="po-md-6" name="nomeorg" [(ngModel)]="nomeorg" p-label="Nome da Organiza&ccedil;&atilde;o de acesso EndPoint"> </po-input>
+  
+          <po-input class="po-md-6" name="codtoken" [(ngModel)]="codtoken" p-label="C&oacute;digo do API Token (Connector Token)"> </po-input>
+          
+        </div>
+        
+      <br>
+  
+  
+        <div class="po-row">
+  
+          <po-checkbox-group
+              class="po-md-6"
+              name="properties"
+              [(ngModel)]="properties"
+              p-label=""
+              [p-options]="propertiesOptions"
+            >
+            </po-checkbox-group>
+  
+            <po-button class="po-md-6" p-label="Salvar" (p-click)="restore(false)" p-type="primary"> </po-button>
+          </div>
+  
+      </form>
+  
+    </po-container>
+  
+  </po-page-default>
+  </div>
+
+  <router-outlet></router-outlet>
+  
