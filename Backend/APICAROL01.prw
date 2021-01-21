@@ -128,9 +128,10 @@ Local oRet		 := &cJsonObj
 Local nI 		 := 0
 Local adados 	 := {}
 Local aDisps  	 := {}
-Local nInicio	 := 1
-Local nFim		 := 0
+Local nInicio	 := 0
 Local nTotalDisp := 0
+Local nTotal     := 0
+Local oCount	 := &cJsonObj
 
 Private aLog		:= { {} }
 Private lApiToken	:= .F.
@@ -140,20 +141,25 @@ Private lTemRR1		:= .F.
 DEFAULT Self:page 		:= PAGE_DEFAULT
 DEFAULT Self:pageSize 	:= PAGESIZE_DEFAULT
 
-aDisps := fDispBusc(Self:Filter)
-nTotalDisp := Len(aDisps[3])
+If Self:page > 1
+	nInicio := (Self:page * Self:pageSize) - Self:pageSize
+EndIf
+aDisps := fDispBusc(Self:Filter, nInicio, Self:pageSize)
 
+If !aDisps[1]
+	SetRestFault(404,EncodeUTF8(NoAcento(OemToAnsi("Erro de comunicação com Carol Clock in"))))
+	Return .F.
+EndIf
+
+nTotalDisp := Len(aDisps[3])
 If Empty(nTotalDisp)
 	SetRestFault(404,EncodeUTF8(NoAcento(OemToAnsi("Dispositivos não cadastrados"))))
 	Return .F.
 EndIf
 
-If Self:page > 1
-	nInicio := Min((Self:page * Self:pageSize) + 1 , nTotalDisp )
-EndIf
-nFim := Min(nTotalDisp,(nInicio + Self:pageSize) - 1 )
-
-For nI := nInicio to nFim
+oCount:fromJson(aDisps[2])
+nTotal := oCount["totalHits"]
+For nI := 1 to nTotalDisp
 	aDados := fMarcBusc(aDisps[3][nI][1],,,.F.,,.T.)
 	If aDados[1]
 		oItem  := &cJsonObj
@@ -164,7 +170,7 @@ For nI := nInicio to nFim
 	EndIf
 Next	
 
-oRet["hasNext"] := nFim < nTotalDisp
+oRet["hasNext"] :=(Self:page * Self:pageSize) < nTotal
 oRet["items"] := aItem
 
 cJson := FWJsonSerialize(oRet, .F., .F., .T.)

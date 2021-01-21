@@ -500,9 +500,9 @@ Função que retorna a lista de dispositivos.
 @since 12/09/2019
 @version undefined
 /*/
-Function fDispBusc(deviceDescription)
+Function fDispBusc(deviceDescription, page, pagesize)
 Local cAuthlg	:= ""																//TOKEN DE ACESSO 
-Local cPageSize	:= "&pageSize=" 													//PARAMETRIZAÇÃO PADRÃO DA API DEVICELIST(QUANTIDADE DE REGISTROS QUE DEVERÃO RETORNAR)
+Local cPageSize	:= "&pageSize=" + Alltrim(Str(pagesize))													//PARAMETRIZAÇÃO PADRÃO DA API DEVICELIST(QUANTIDADE DE REGISTROS QUE DEVERÃO RETORNAR)
 Local cAsort	:= "&sortOrder=ASC"  												//PARAMETRIZAÇÃO PADRÃO DA API DEVICELIST(ORDENAÇÃO DOS REGISTROS)
 Local cIndexType:= "?indexType=MASTER" 												//PARAMETRIZAÇÃO PADRÃO DA API DEVICELIST(TIPO DE INDICE)
 Local cFields	:= "&fields=mdmGoldenFieldAndValues.devicecode,mdmGoldenFieldAndValues.devicedescription"  					//PARAMETRIZAÇÃO PADRÃO DA API DEVICELIST(CAMPOS)
@@ -522,20 +522,25 @@ Local oJson     := JsonObject():New()												//JSON QUE RECEBERÁ O RETORNO D
 Local oErro     := JsonObject():New()												//JSON QUE RECEBERÁ O RETORNO DA API
 Local oClient 	:= nil 																//OBJETO REST QUE SERÁ USADO NA REQUISIÇÃO
 	
-if !Empty(deviceDescription)
-	cBody   := ""		
-	cBody += '{' 
-	cBody +=	'"deviceDescription": "'+deviceDescription+'"'
-	cBody += '}'
-EndIf
- 	cAuthlg	:= IIF(Len(aAccess) > 2 .And. aAccess[2] != NIL ,aAccess[2],"") 		//CHECAGEM DE SUCESSO NA CONEXÃO E RETORNO DE TOKEN
+	if !Empty(deviceDescription)
+		cBody   := ""		
+		cBody += '{' 
+		cBody +=	'"deviceDescription": "'+deviceDescription+'",'
+		cBody += '}'
+	EndIf
+
+	if !Empty(page)
+		cFields  +=	"&offset="+alltrim(str(page))
+	EndIf
+
+ 	cAuthlg	:= IIF(Len(aAccess) > 2 .And. aAccess[2] != NIL ,aAccess[2],"") 		//CHECAGEM DE SUCESSO NA CONEXÃƒO E RETORNO DE TOKEN
 
 	If !Empty(cAuthlg) .Or. lApiToken
 		
 		oClient 	:= FwRest():New(aParams[2])
 		cURL		:= aParams[8] 
 		
-		oClient:SetPath(cURL + cIndexType + cAsort + cFields)
+		oClient:SetPath(cURL + cIndexType + cPageSize + cAsort + cFields)
 		
 		If !lApiToken
 			aHeader:= { "Authorization: Bearer " + cAuthlg,;
@@ -553,7 +558,7 @@ EndIf
 		If oClient:Post(aHeader) .And. at("hits",oClient:GetResult()) > 0
 			cRet := oClient:GetResult()
 			oJson:fromJson(cRet)
-			If Len(oJson["hits"]) < oJson["totalHits"] 
+			If page == nil .And. Len(oJson["hits"]) < oJson["totalHits"] 
 				oClient:SetPath(cURL + cIndexType + cPageSize + cValToChar(oJson["totalHits"]) + cAsort + cFields)		
 				oClient:Post(aHeader) 
 				cRet := oClient:GetResult()
