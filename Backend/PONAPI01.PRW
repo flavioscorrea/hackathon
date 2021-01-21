@@ -9,7 +9,7 @@ Static __oSt02 := Nil//fProxRegVal()
 Static __oSt03 := Nil//fValidaNSR()
 
 /*/{Protheus.doc} PONAPI01
-//Realiza a busca pelas marca√ß√µes da API Clock In da Carol e grava as informa√ß√µes na tabela de TSA do Protheus.
+//Realiza a busca pelas marcaÁıes da API Clock In da Carol e grava as informaÁıes na tabela de TSA do Protheus.
 @author Wesley Alves Pereira
 @since 13/09/2019
 @version undefined
@@ -17,7 +17,7 @@ Static __oSt03 := Nil//fValidaNSR()
 /*/
 Function PONAPI01(xWork,dInicio,dFinal,cCoDisp,nCodNSR)
 Local aDisps		:= {} //Array de dispositivos da Carol
-Local aDados    	:= {} //Array de Marca√ß√µes da Carol
+Local aDados    	:= {} //Array de MarcaÁıes da Carol
 Local cDtIni    	:= ''
 Local cDtFin    	:= ''
 Local nCoutDisp 	:= 0
@@ -27,7 +27,7 @@ Local lWorkFlow 	:= .F.
 Local cCodNSR   	:= ''
 Local aTempss   	:= {}
 Local lNSRInfor 	:= .F.
-Local aTitle    	:= { OemToAnsi(STR0024) }//"Erro na integra√ß√£o com a API Clockin da Carol"
+Local aTitle    	:= { OemToAnsi(STR0024) }//"Erro na integraÁ„o com a API Clockin da Carol"
 
 Local cLockName 	:= "PONAPI01"+DTOS(DATE())
 
@@ -50,11 +50,11 @@ If ValType(xWork) == "A" //Proveniente de Schedule
 			PREPARE ENVIRONMENT EMPRESA (xWork[1]) FILIAL (xWork[2]) MODULO "GPE"
 			lTemRR1	:= AliasInDic("RR1")
 		Else
-			ConsoleJob(STR0021) //"Para utiliza√ß√£o da rotina em Schedule, informe a Empresa e a Filial no cadastro do Schedule e n√£o utilize parametros!"
+			ConsoleJob(STR0021) //"Para utilizaÁ„o da rotina em Schedule, informe a Empresa e a Filial no cadastro do Schedule e n„o utilize parametros!"
 			Return (.F.)
 		EndIf
 	Else
-		ConsoleJob(STR0021) //"Para utiliza√ß√£o da rotina em Schedule, informe a Empresa e a Filial no cadastro do Schedule e n√£o utilize parametros!"
+		ConsoleJob(STR0021) //"Para utilizaÁ„o da rotina em Schedule, informe a Empresa e a Filial no cadastro do Schedule e n„o utilize parametros!"
 		Return (.F.)
 	EndIf
 Else
@@ -63,9 +63,9 @@ EndIf
 
 If !LockByName(cLockName,.F.,.F.,.T.)
  		If ! lWorkFlow
- 			Help( ,, 'HELP',, STR0020, 1, 0) //"Esta rotina j√° est√° sendo utilizada em outro processo!"
+ 			Help( ,, 'HELP',, STR0020, 1, 0) //"Esta rotina j· est· sendo utilizada em outro processo!"
 		Else
-			ConsoleJob(STR0020) //"Esta rotina j√° est√° sendo utilizada em outro processo!"
+			ConsoleJob(STR0020) //"Esta rotina j· est· sendo utilizada em outro processo!"
 		EndIf
 		
 		Return (.F.)
@@ -74,9 +74,9 @@ EndIf
 If !lTemRR1 .And. !fTemTab()
  	If ! fCriaTab(lWorkFlow)
  		If ! lWorkFlow
- 			Help( ,, 'HELP',, STR0018, 1, 0) //"N√£o foi poss√≠vel criar a tabela do processo de integra√ß√£o! Verifique as permiss√µes necess√°rias."
+ 			Help( ,, 'HELP',, STR0018, 1, 0) //"N„o foi possÌvel criar a tabela do processo de integraÁ„o! Verifique as permissıes necess·rias."
 		Else
-			ConsoleJob(STR0018) //"N√£o foi poss√≠vel criar a tabela do processo de integra√ß√£o! Verifique as permiss√µes necess√°rias."
+			ConsoleJob(STR0018) //"N„o foi possÌvel criar a tabela do processo de integraÁ„o! Verifique as permissıes necess·rias."
 		EndIf
 		
 		UnLockByName(cLockName,.F.,.F.,.T.)
@@ -88,9 +88,9 @@ EndIf
 
 If nCodNSR < 0
 	If ! lWorkFlow
-		Help( ,, 'HELP',, STR0015, 1, 0) //"Verifique o C√≥digo NSR Informado, pois o mesmo somente aceita n√∫meros positivos!"
+		Help( ,, 'HELP',, STR0015, 1, 0) //"Verifique o CÛdigo NSR Informado, pois o mesmo somente aceita n˙meros positivos!"
 	Else
-		ConsoleJob(STR0015) //"Verifique o C√≥digo NSR Informado, pois o mesmo somente aceita n√∫meros positivos!"
+		ConsoleJob(STR0015) //"Verifique o CÛdigo NSR Informado, pois o mesmo somente aceita n˙meros positivos!"
 	EndIf
 
 	UnLockByName(cLockName,.F.,.F.,.T.)
@@ -134,9 +134,9 @@ If aDisps[1] .and. Len(aDisps[nPosDados]) > 0
 		dbSelectArea("RR1")
 		If !fMigrRR1()
 			If !lWorkFlow
-				MsgAlert(STR0045)//"Erro na migra√ß√£o dos registros da tabela MSA_CONTROL_MARCAC para a tabela RR1. Ser√° necess√°rio reinicializar a tabela RR1 e reiniciar o processo. A integra√ß√£o ser√° abortada"
+				MsgAlert(STR0045)//"Erro na migraÁ„o dos registros da tabela MSA_CONTROL_MARCAC para a tabela RR1. Ser· necess·rio reinicializar a tabela RR1 e reiniciar o processo. A integraÁ„o ser· abortada"
 			Else
-				ConsoleJob(STR0045)//"Erro na migra√ß√£o dos registros da tabela MSA_CONTROL_MARCAC para a tabela RR1. Ser√° necess√°rio reinicializar a tabela RR1 e reiniciar o processo. A integra√ß√£o ser√° abortada"
+				ConsoleJob(STR0045)//"Erro na migraÁ„o dos registros da tabela MSA_CONTROL_MARCAC para a tabela RR1. Ser· necess·rio reinicializar a tabela RR1 e reiniciar o processo. A integraÁ„o ser· abortada"
 			EndIf				
 			Return .F.
 		EndIf
@@ -153,9 +153,9 @@ If aDisps[1] .and. Len(aDisps[nPosDados]) > 0
 			If aDados[2] <> Nil
 				If ! aDados[1] .AND. AT("code",aDados[2]) > 0				
 					If ! lWorkFlow
-						fMakeLog( aLog, aTitle, Nil, Nil, , OemToAnsi(STR0025), "M", "L",, .F.) //"Log de Ocorr√™ncias"
+						fMakeLog( aLog, aTitle, Nil, Nil, , OemToAnsi(STR0025), "M", "L",, .F.) //"Log de OcorrÍncias"
 					Else
-						ConsoleJob(STR0007 + "  " + aDados[2]) //"N√£o foi poss√≠vel acessar a API Clockin da Carol. "
+						ConsoleJob(STR0007 + "  " + aDados[2]) //"N„o foi possÌvel acessar a API Clockin da Carol. "
 					EndIf
 					
 					UnLockByName(cLockName,.F.,.F.,.T.)
@@ -165,9 +165,9 @@ If aDisps[1] .and. Len(aDisps[nPosDados]) > 0
 				EndIf
 			Else
 				If ! lWorkFlow
-					Help( ,, 'HELP',, STR0007 + "  " + STR0011, 1, 0) //"N√£o foi poss√≠vel acessar a API Clockin da Carol. " + "Verifique o parametro MV_APICLO8 pois ele √© respons√°vel pelo cadastro do path da api clockinrecordsList para a integra√ß√£o de Clockin da Carol."
+					Help( ,, 'HELP',, STR0007 + "  " + STR0011, 1, 0) //"N„o foi possÌvel acessar a API Clockin da Carol. " + "Verifique o parametro MV_APICLO8 pois ele È respons·vel pelo cadastro do path da api clockinrecordsList para a integraÁ„o de Clockin da Carol."
 				Else
-					ConsoleJob(STR0007 + "  " + STR0011) //"N√£o foi poss√≠vel acessar a API Clockin da Carol. " + "Verifique o parametro MV_APICLO8 pois ele √© respons√°vel pelo cadastro do path da api clockinrecordsList para a integra√ß√£o de Clockin da Carol." 
+					ConsoleJob(STR0007 + "  " + STR0011) //"N„o foi possÌvel acessar a API Clockin da Carol. " + "Verifique o parametro MV_APICLO8 pois ele È respons·vel pelo cadastro do path da api clockinrecordsList para a integraÁ„o de Clockin da Carol." 
 				EndIf
 				
 				UnLockByName(cLockName,.F.,.F.,.T.)
@@ -183,14 +183,14 @@ Else
 	If ! aDisps[1]
 		If at("code",aDisps[2]) > 0		
 			If ! lWorkFlow
-				fMakeLog( aLog, aTitle, Nil, Nil, , OemToAnsi(STR0025), "M", "L",, .F.) //"Log de Ocorr√™ncias"
+				fMakeLog( aLog, aTitle, Nil, Nil, , OemToAnsi(STR0025), "M", "L",, .F.) //"Log de OcorrÍncias"
 			Else
-				ConsoleJob(STR0007 + "  " + aDisps[2]) //"N√£o foi poss√≠vel acessar a API Clockin da Carol. "
+				ConsoleJob(STR0007 + "  " + aDisps[2]) //"N„o foi possÌvel acessar a API Clockin da Carol. "
 			EndIf			
 		Else
 			If !Empty(aDisps[2])
 				If ! lWorkFlow
-					fMakeLog( aLog, aTitle, Nil, Nil, , OemToAnsi(STR0025), "M", "L",, .F.) //"Log de Ocorr√™ncias"
+					fMakeLog( aLog, aTitle, Nil, Nil, , OemToAnsi(STR0025), "M", "L",, .F.) //"Log de OcorrÍncias"
 				Else
 					ConsoleJob(aDisps[2]) //Mensagem de erro da API.
 				EndIf
@@ -205,9 +205,9 @@ Else
 EndIf
 
 If ! lWorkFlow
-	ApMsgInfo(STR0016+' '+STR0017) //" Processo Finalizado." + "Verifique as informa√ß√µes gravadas na tabela de marca√ß√µes!"
+	ApMsgInfo(STR0016+' '+STR0017) //" Processo Finalizado." + "Verifique as informaÁıes gravadas na tabela de marcaÁıes!"
 Else
-	ConsoleJob(STR0016+' '+STR0017) //" Processo Finalizado." + "Verifique as informa√ß√µes gravadas na tabela de marca√ß√µes!"
+	ConsoleJob(STR0016+' '+STR0017) //" Processo Finalizado." + "Verifique as informaÁıes gravadas na tabela de marcaÁıes!"
 EndIf 
 
 UnLockByName(cLockName,.F.,.F.,.T.)
@@ -332,13 +332,13 @@ Next nRegCount
 Return (.T.)
 
 /*/{Protheus.doc} fMarcBusc
-Busca a listagem de marca√ß√µes de um determinado dispositivo.
+Busca a listagem de marcaÁıes de um determinado dispositivo.
 @author Wesley Alves Pereira
 @since 13/09/2019
 /*/
-Function fMarcBusc(cAccesCod,cDtIni,cDtFin,lNSRInfor,cCodNSR)
+Function fMarcBusc(cAccesCod,cDtIni,cDtFin,lNSRInfor,cCodNSR,lRetMarcs)
 Local cSiteW    := '' 
-Local aAccess	:= {} //AUTENTICA√á√ÉO DE USU√ÅRIO
+Local aAccess	:= {} //AUTENTICA«√O DE USU¡RIO
 Local aHeader	:= {} //ARRAY CONTENDO O AUTHORIZATION
 Local oClient 	
 Local cPageSize	:= "&pageSize=1000"
@@ -348,8 +348,8 @@ Local cBody		:= ''
 Local cFields	:= '&fields=mdmGoldenFieldAndValues.piscode,mdmGoldenFieldAndValues.nsrcode,mdmGoldenFieldAndValues.mdmeventdate,mdmGoldenFieldAndValues.eventdatestr,mdmGoldenFieldAndValues.mdmpersonid,mdmGoldenFieldAndValues.mdmname,mdmGoldenFieldAndValues.devicedescription'
 Local cRet		:= ''
 Local cRetCarol	:= ''
-Local aMarcac	:= {} //ARRAY CONTENDO TODAS AS MARCA√á√ïES DE UM DISPOSITIVO
-Local cAuthlg	:= '' //CHECAGEM DE SUCESS√ÉO NA CONEX√ÉO 
+Local aMarcac	:= {} //ARRAY CONTENDO TODAS AS MARCA«’ES DE UM DISPOSITIVO
+Local cAuthlg	:= '' //CHECAGEM DE SUCESS√O NA CONEX√O 
 Local oErro     := JsonObject():New()
 Local oJson     := JsonObject():New()
 Local lProcIni	:= .F.
@@ -357,6 +357,13 @@ Local lRet 		:= .F.
 Local aParams	:= fBuscaParam()
 Local lRepost	:= 0
 Local nUltNSR	:= 0
+Local nTot		:= 0
+
+Default lRetMarcs := .F.
+
+If lRetMarcs
+	cFields	:= '&fields=mdmGoldenFieldAndValues.nsrcode'
+EndIf
 
 cSiteW 		:= aParams[2]
 cURL   		:= aParams[9] 
@@ -395,40 +402,46 @@ If !Empty(cAuthlg) .Or. lApiToken
 	cPageSize	:= "&pageSize=1000"
 		
 	oClient:SetPath(cURL + cAsort + cPageSize + cFields)
-
+	
 	If oClient:Post(aHeader) .And. at("totalHits",oClient:GetResult()) > 0
-		lRet := .T.
-		cRet := oClient:GetResult()
-		oJson:fromJson(cRet)
-		If Len(oJson["hits"]) > 0
-			fAddMarc( oJson, @aMarcac, @nUltNSR )
-		EndIf
-		If oJson["count"] < oJson["totalHits"] 
-			lRepost := .T.
-			While lRepost
-				cBody   := ""					
-				cBody 	+= '{' 
-				cBody 	+=	'"deviceCode": "'+cAccesCod+'",'
-				cBody 	+=	'"nsrCode": "'+cValToChar(nUltNSR+1)+'"'
-				cBody 	+= '}'
-				cPageSize	:= "&pageSize="+cValToChar(oJson["totalHits"])
-				oClient:SetPostParams(cBody)
-				oClient:SetPath(cURL + cAsort + cPageSize + cFields)	
-				If oClient:Post(aHeader) .And. at("totalHits",oClient:GetResult()) > 0
-					cRet := oClient:GetResult()
-					oJson:fromJson(cRet)
-					If Len(oJson["hits"]) > 0
-						fAddMarc( oJson, @aMarcac, @nUltNSR )
-					EndIf
-					If !(oJson["count"] < oJson["totalHits"])
+		Begin Sequence
+			lRet := .T.
+			cRet := oClient:GetResult()
+			oJson:fromJson(cRet)
+			If lRetMarcs
+				nTot := oJson["totalHits"]
+				Break
+			EndIf
+			If Len(oJson["hits"]) > 0
+				fAddMarc( oJson, @aMarcac, @nUltNSR )
+			EndIf
+			If oJson["count"] < oJson["totalHits"] 
+				lRepost := .T.
+				While lRepost
+					cBody   := ""					
+					cBody 	+= '{' 
+					cBody 	+=	'"deviceCode": "'+cAccesCod+'",'
+					cBody 	+=	'"nsrCode": "'+cValToChar(nUltNSR+1)+'"'
+					cBody 	+= '}'
+					cPageSize	:= "&pageSize="+cValToChar(oJson["totalHits"])
+					oClient:SetPostParams(cBody)
+					oClient:SetPath(cURL + cAsort + cPageSize + cFields)	
+					If oClient:Post(aHeader) .And. at("totalHits",oClient:GetResult()) > 0
+						cRet := oClient:GetResult()
+						oJson:fromJson(cRet)
+						If Len(oJson["hits"]) > 0
+							fAddMarc( oJson, @aMarcac, @nUltNSR )
+						EndIf
+						If !(oJson["count"] < oJson["totalHits"])
+							lRepost := .F.
+						EndIf
+					Else
 						lRepost := .F.
+						lRet 	:= .F.
 					EndIf
-				Else
-					lRepost := .F.
-					lRet 	:= .F.
-				EndIf
-			End
-		EndIf
+				End
+			EndIf
+		End Sequence
 	Else	
 		lRet 		:= .F.
 		cRetCarol	:= oClient:GetResult()
@@ -437,16 +450,16 @@ If !Empty(cAuthlg) .Or. lApiToken
 		oErro:fromJSON( cRetCarol )
 		oErro:toJSON( cRetCarol )
 
-		aAdd( aLog[1], STR0032 )//"Verifique se o path da API clockinrecordsList est√° informado corretamente no par√¢metro MV_APICL08."
+		aAdd( aLog[1], STR0032 )//"Verifique se o path da API clockinrecordsList est· informado corretamente no par‚metro MV_APICL08."
 		aAdd( aLog[1], "")
 		If !Empty( oErro:getJSONText( "code" ) ) .And. oErro:getJSONText( "code" ) != "null"
-			aAdd( aLog[1], STR0027 + oErro:getJSONText( "code" ) )//"C√≥digo do erro retornado pela API: "
+			aAdd( aLog[1], STR0027 + oErro:getJSONText( "code" ) )//"CÛdigo do erro retornado pela API: "
 		EndIf
 		If !Empty( oErro:getJSONText( "message" ) ) .And. oErro:getJSONText( "message" ) != "null"
 			aAdd( aLog[1], STR0028 + oErro:getJSONText( "message" ) )//"Mensagem de erro retornado pela API: "
 		EndIf
 		aAdd( aLog[1], "")
-		aAdd( aLog[1], STR0031 )//"Configura√ß√£o dos par√¢metros: "
+		aAdd( aLog[1], STR0031 )//"ConfiguraÁ„o dos par‚metros: "
 		aAdd( aLog[1], "  MV_APICL01: " + aParams[2] )
 		aAdd( aLog[1], "  MV_APICL02: " + aParams[3] )
 		aAdd( aLog[1], "  MV_APICL03: " + aParams[4] )
@@ -479,35 +492,35 @@ Else
 	EndIf
 EndIf 
 
-Return ( {lRet,cRet,aMarcac} )
+Return ( {lRet,cRet,aMarcac,nTot} )
 
 /*/{Protheus.doc} fDispBusc
-Fun√ß√£o que retorna a lista de dispositivos.
+FunÁ„o que retorna a lista de dispositivos.
 @author edvf8
 @since 12/09/2019
 @version undefined
 /*/
 Function fDispBusc(deviceDescription)
 Local cAuthlg	:= ""																//TOKEN DE ACESSO 
-Local cPageSize	:= "&pageSize=" 													//PARAMETRIZA√á√ÉO PADR√ÉO DA API DEVICELIST(QUANTIDADE DE REGISTROS QUE DEVER√ÉO RETORNAR)
-Local cAsort	:= "&sortOrder=ASC"  												//PARAMETRIZA√á√ÉO PADR√ÉO DA API DEVICELIST(ORDENA√á√ÉO DOS REGISTROS)
-Local cIndexType:= "?indexType=MASTER" 												//PARAMETRIZA√á√ÉO PADR√ÉO DA API DEVICELIST(TIPO DE INDICE)
-Local cFields	:= "&fields=mdmGoldenFieldAndValues.devicecode,mdmGoldenFieldAndValues.devicedescription"  					//PARAMETRIZA√á√ÉO PADR√ÉO DA API DEVICELIST(CAMPOS)
+Local cPageSize	:= "&pageSize=" 													//PARAMETRIZA«√O PADR√O DA API DEVICELIST(QUANTIDADE DE REGISTROS QUE DEVER√O RETORNAR)
+Local cAsort	:= "&sortOrder=ASC"  												//PARAMETRIZA«√O PADR√O DA API DEVICELIST(ORDENA«√O DOS REGISTROS)
+Local cIndexType:= "?indexType=MASTER" 												//PARAMETRIZA«√O PADR√O DA API DEVICELIST(TIPO DE INDICE)
+Local cFields	:= "&fields=mdmGoldenFieldAndValues.devicecode,mdmGoldenFieldAndValues.devicedescription"  					//PARAMETRIZA«√O PADR√O DA API DEVICELIST(CAMPOS)
 Local cURL		:= "" 																//URL DE ACESSO A CAROL
-Local cBody		:= "" 																//CORPO DA REQUISI√á√ÉO CASO NECESS√ÅRIO, NESTA DEVICELIST N√ÉO POSSUI.
+Local cBody		:= "" 																//CORPO DA REQUISI«√O CASO NECESS¡RIO, NESTA DEVICELIST N√O POSSUI.
 Local cRet		:= "" 																//ARMAZENA O RETORNO EM TEXTO DA API COM A LISTA DE DISPOSITIVOS
 Local cRetCarol	:= "" 																//ARMAZENA O RETORNO EM TEXTO DA API COM A LISTA DE DISPOSITIVOS
 Local lSucess	:= .T.
-Local nContIds	:= "" 																//VARIAVEL DE CONTROLE PARA USO EM ESTRUTURA DE REPETI√á√ÉO
+Local nContIds	:= "" 																//VARIAVEL DE CONTROLE PARA USO EM ESTRUTURA DE REPETI«√O
 
-Local aAccess	:= fConnCarol()														//AUTENTICA√á√ÉO DE USU√ÅRIO
-Local aParams	:= fBuscaParam() 													//BUSCA PAR√ÇMETROS DE CONEX√ÉO COM A CAROL
+Local aAccess	:= fConnCarol()														//AUTENTICA«√O DE USU¡RIO
+Local aParams	:= fBuscaParam() 													//BUSCA PAR¬METROS DE CONEX√O COM A CAROL
 Local aHeader	:= {} 																//ARRAY CONTENDO O AUTHORIZATION
 Local aDisp		:= {} 																//ARRAY CONTENDO OS IDS DOS DISPOSITIVOS
 
-Local oJson     := JsonObject():New()												//JSON QUE RECEBER√Å O RETORNO DA API
-Local oErro     := JsonObject():New()												//JSON QUE RECEBER√Å O RETORNO DA API
-Local oClient 	:= nil 																//OBJETO REST QUE SER√Å USADO NA REQUISI√á√ÉO
+Local oJson     := JsonObject():New()												//JSON QUE RECEBER¡ O RETORNO DA API
+Local oErro     := JsonObject():New()												//JSON QUE RECEBER¡ O RETORNO DA API
+Local oClient 	:= nil 																//OBJETO REST QUE SER¡ USADO NA REQUISI«√O
 	
 if !Empty(deviceDescription)
 	cBody   := ""		
@@ -515,7 +528,7 @@ if !Empty(deviceDescription)
 	cBody +=	'"deviceDescription": "'+deviceDescription+'"'
 	cBody += '}'
 EndIf
- 	cAuthlg	:= IIF(Len(aAccess) > 2 .And. aAccess[2] != NIL ,aAccess[2],"") 		//CHECAGEM DE SUCESSO NA CONEX√ÉO E RETORNO DE TOKEN
+ 	cAuthlg	:= IIF(Len(aAccess) > 2 .And. aAccess[2] != NIL ,aAccess[2],"") 		//CHECAGEM DE SUCESSO NA CONEX√O E RETORNO DE TOKEN
 
 	If !Empty(cAuthlg) .Or. lApiToken
 		
@@ -559,16 +572,16 @@ EndIf
 			oErro:fromJSON( cRetCarol )
 			oErro:toJSON( cRetCarol )
 
-			aAdd( aLog[1], STR0009 )//"Verifique o parametro MV_APICLO7 pois ele √© respons√°vel pelo cadastro do path da api DeviceList  para a integra√ß√£o de Clockin da Carol."
+			aAdd( aLog[1], STR0009 )//"Verifique o parametro MV_APICLO7 pois ele È respons·vel pelo cadastro do path da api DeviceList  para a integraÁ„o de Clockin da Carol."
 			aAdd( aLog[1], "")
 			If !Empty( oErro:getJSONText( "code" ) ) .And. oErro:getJSONText( "code" ) != "null"
-				aAdd( aLog[1], STR0027 + oErro:getJSONText( "code" ) )//"C√≥digo do erro retornado pela API: "
+				aAdd( aLog[1], STR0027 + oErro:getJSONText( "code" ) )//"CÛdigo do erro retornado pela API: "
 			EndIf
 			If !Empty( oErro:getJSONText( "message" ) ) .And. oErro:getJSONText( "message" ) != "null"
 				aAdd( aLog[1], STR0028 + oErro:getJSONText( "message" ) )//"Mensagem de erro retornado pela API: "
 			EndIf
 			aAdd( aLog[1], "")
-			aAdd( aLog[1], STR0031 )//"Configura√ß√£o dos par√¢metros: "
+			aAdd( aLog[1], STR0031 )//"ConfiguraÁ„o dos par‚metros: "
 			aAdd( aLog[1], "  MV_APICL01: " + aParams[2] )
 			aAdd( aLog[1], "  MV_APICL02: " + aParams[3] )
 			aAdd( aLog[1], "  MV_APICL03: " + aParams[4] )
@@ -599,7 +612,7 @@ Return {lSucess,cRet,aDisp}
 
 
 /*/{Protheus.doc} fConnCarol
-Programa de libera√ß√£o de Token para acesso a API¬¥s Clock In da Carol
+Programa de liberaÁ„o de Token para acesso a API¥s Clock In da Carol
 @author Wesley Alves Pereira
 @since 12/09/2019
 @return return, return_description
@@ -627,42 +640,42 @@ Local oClient   := Nil
 aParam := fBuscaParam()
 
 If Empty(aParam[2])
-	aAdd( aLog[1], STR0001 ) //"Verifique o parametro MV_APICLO1 pois ele √© respons√°vel pelo cadastro da URL de EndPoint para a integra√ß√£o de Clockin da Carol."
+	aAdd( aLog[1], STR0001 ) //"Verifique o parametro MV_APICLO1 pois ele È respons·vel pelo cadastro da URL de EndPoint para a integraÁ„o de Clockin da Carol."
 	lErro := .T.
 EndIf
 
 If Empty(aParam[3]) .OR. aParam[3] == "/" 
-	aAdd( aLog[1], STR0002 ) //"Verifique o parametro MV_APICLO2 pois ele √© respons√°vel pelo cadastro do path da api Token para a integra√ß√£o de Clockin da Carol."
+	aAdd( aLog[1], STR0002 ) //"Verifique o parametro MV_APICLO2 pois ele È respons·vel pelo cadastro do path da api Token para a integraÁ„o de Clockin da Carol."
 	lErro := .T.
 EndIf
 
 If Empty(aParam[4])
-	aAdd( aLog[1], STR0003 ) //"Verifique o parametro MV_APICLO3 pois ele √© respons√°vel pelo cadastro do Id Conector para a integra√ß√£o de Clockin da Carol."
+	aAdd( aLog[1], STR0003 ) //"Verifique o parametro MV_APICLO3 pois ele È respons·vel pelo cadastro do Id Conector para a integraÁ„o de Clockin da Carol."
 	lErro := .T.
 EndIf
 
 If Empty(aParam[7])
-	aAdd( aLog[1], STR0006 ) //"Verifique o parametro MV_APICLO6 pois ele √© respons√°vel pelo cadastro do Domain Name para a integra√ß√£o de Clockin da Carol."
+	aAdd( aLog[1], STR0006 ) //"Verifique o parametro MV_APICLO6 pois ele È respons·vel pelo cadastro do Domain Name para a integraÁ„o de Clockin da Carol."
 	lErro := .T.
 EndIf
 
 If Empty(aParam[8]) .OR. aParam[8] == "/" 
-	aAdd( aLog[1], STR0009 ) //"Verifique o parametro MV_APICLO7 pois ele √© respons√°vel pelo cadastro do path da api DeviceList  para a integra√ß√£o de Clockin da Carol."
+	aAdd( aLog[1], STR0009 ) //"Verifique o parametro MV_APICLO7 pois ele È respons·vel pelo cadastro do path da api DeviceList  para a integraÁ„o de Clockin da Carol."
 	lErro := .T.
 EndIf
 
 If Empty(aParam[9]) .OR. aParam[9] == "/" 
-	aAdd( aLog[1], STR0011 ) //"Verifique o parametro MV_APICLO8 pois ele √© respons√°vel pelo cadastro do path da api clockinrecordsList para a integra√ß√£o de Clockin da Carol."
+	aAdd( aLog[1], STR0011 ) //"Verifique o parametro MV_APICLO8 pois ele È respons·vel pelo cadastro do path da api clockinrecordsList para a integraÁ„o de Clockin da Carol."
 	lErro := .T.
 EndIf
 
 If Empty(aParam[10]) 
-	aAdd( aLog[1], STR0044 ) //"Verifique o parametro MV_APICLO9 pois ele √© respons√°vel pelo cadastro do Organization Name para a integra√ß√£o de Clockin da Carol."
+	aAdd( aLog[1], STR0044 ) //"Verifique o parametro MV_APICLO9 pois ele È respons·vel pelo cadastro do Organization Name para a integraÁ„o de Clockin da Carol."
 	lErro := .T.
 EndIf
 
 If ( (Empty(aParam[5]) .Or. Empty(aParam[6]) ) .And. Empty(aParam[12]) )
-	aAdd( aLog[1], STR0043 ) //"Para realizar a integra√ß√£o ser√° necess√°rio preencher os par√¢metros MV_APICLO4 e MV_APICLO5 ou MV_APICLOA."
+	aAdd( aLog[1], STR0043 ) //"Para realizar a integraÁ„o ser· necess·rio preencher os par‚metros MV_APICLO4 e MV_APICLO5 ou MV_APICLOA."
 	lErro := .T.
 EndIf
 
@@ -670,7 +683,7 @@ If lErro
 	lSucess := .F.
 
 	aAdd( aLog[1], "")
-	aAdd( aLog[1], STR0031 )//"Configura√ß√£o dos par√¢metros: "
+	aAdd( aLog[1], STR0031 )//"ConfiguraÁ„o dos par‚metros: "
 	aAdd( aLog[1], "  MV_APICL01: " + aParam[2] )
 	aAdd( aLog[1], "  MV_APICL02: " + aParam[3] )
 	aAdd( aLog[1], "  MV_APICL03: " + aParam[4] )
@@ -695,7 +708,7 @@ If lErro
 	Return (aRetorno)
 EndIf
 
-// Verifica se a autentica√ß√£o deve ser realizada via API Token
+// Verifica se a autenticaÁ„o deve ser realizada via API Token
 If !Empty(aParam[12])
 	// Faz um teste do Connector Token informado
 	ccURL	:= aParam[2]
@@ -725,8 +738,8 @@ If !Empty(aParam[12])
 				If !Empty( oErro:getJSONText( "errorCode" ) ) .And. oErro:getJSONText( "errorCode" ) == "404" .And. oErro:getJSONText( "possibleResponsibleField" ) == "apiKey" 
 					lAtuaToken := .T.
 				ElseIf !Empty( oErro:getJSONText( "errorCode" ) ) .And. oErro:getJSONText( "errorCode" ) == "404" .And. oErro:getJSONText( "possibleResponsibleField" ) == "mdmName" 
-					aAdd( aLog[1], STR0038 )//"O Connector Id preenchido no par√¢metro MV_APICLO3 est√° incorreto."
-					aAdd( aLog[1], STR0040 )//"Foi realizado uma tentativa de autentica√ß√£o por usu√°rio e senha."
+					aAdd( aLog[1], STR0038 )//"O Connector Id preenchido no par‚metro MV_APICLO3 est· incorreto."
+					aAdd( aLog[1], STR0040 )//"Foi realizado uma tentativa de autenticaÁ„o por usu·rio e senha."
 					aAdd( aLog[1], "")
 				EndIf
 			EndIf
@@ -735,23 +748,23 @@ If !Empty(aParam[12])
 Else
 	If Len(aLog) > 0
 		If Len(aLog[1]) > 0
-			If !aScan(aLog, {|x| x[1] == "Falha na autentica√ß√£o por API Key (Opcional)."}) > 0
-				aAdd( aLog[1], STR0039 )//"Falha na autentica√ß√£o por API Key (Opcional)."
-				aAdd( aLog[1], STR0041 )//"Para utilizar a autentica√ß√£o por API Key crie o par√¢metro MV_APICLOA e preencha com o token gerado pela Carol."
-				aAdd( aLog[1], STR0040 )//"Foi realizado uma tentativa de autentica√ß√£o por usu√°rio e senha."
+			If !aScan(aLog, {|x| x[1] == "Falha na autenticaÁ„o por API Key (Opcional)."}) > 0
+				aAdd( aLog[1], STR0039 )//"Falha na autenticaÁ„o por API Key (Opcional)."
+				aAdd( aLog[1], STR0041 )//"Para utilizar a autenticaÁ„o por API Key crie o par‚metro MV_APICLOA e preencha com o token gerado pela Carol."
+				aAdd( aLog[1], STR0040 )//"Foi realizado uma tentativa de autenticaÁ„o por usu·rio e senha."
 				aAdd( aLog[1], "" )
 			EndIf
 		Else
-			aAdd( aLog[1], STR0039 )//"Falha na autentica√ß√£o por API Key (Opcional)."
-			aAdd( aLog[1], STR0041 )//"Para utilizar a autentica√ß√£o por API Key crie o par√¢metro MV_APICLOA e preencha com o token gerado pela Carol."
-			aAdd( aLog[1], STR0040 )//"Foi realizado uma tentativa de autentica√ß√£o por usu√°rio e senha."
+			aAdd( aLog[1], STR0039 )//"Falha na autenticaÁ„o por API Key (Opcional)."
+			aAdd( aLog[1], STR0041 )//"Para utilizar a autenticaÁ„o por API Key crie o par‚metro MV_APICLOA e preencha com o token gerado pela Carol."
+			aAdd( aLog[1], STR0040 )//"Foi realizado uma tentativa de autenticaÁ„o por usu·rio e senha."
 			aAdd( aLog[1], "" )
 		EndIf
 	EndIf
 EndIf
 
 If !lApiToken
-	// Autentica√ß√£o utilizando usu√°rio e senha para gerar o Access Token
+	// AutenticaÁ„o utilizando usu·rio e senha para gerar o Access Token
 	aHeader := {}
 	AAdd( aHeader, "Accept: application/json" )
 	AAdd( aHeader, "Content-Type: application/x-www-form-urlencoded" )
@@ -774,8 +787,8 @@ If !lApiToken
 				If oRet:fromJson(cRet) == Nil .And. oRet["access_token"] <> Nil
 					lSucess := .T.
 					cErro := "ok"
-					// Tenta gerar o API Token se n√£o existir, para ser utilizado
-					// em integra√ß√µes futuras
+					// Tenta gerar o API Token se n„o existir, para ser utilizado
+					// em integraÁıes futuras
 					If ( !lGeraTokn .And. aParam[13] .And. Empty( aParam[12] ) ) .Or. lAtuaToken
 						fGeraApiTk( aParam[2], oRet:GetJsonText( "access_token" ), aParam[4], aParam[10] )
 					EndIf
@@ -787,36 +800,36 @@ If !lApiToken
 		cRet := oClient:GetResult()
 
 		If lAtuaToken
-			aAdd( aLog[1], STR0037 )//"API Key (Connector Token) inv√°lida, verifique se a API Key est√° correta ou revogue, gere uma nova API Key e preencha no par√¢metro MV_APICLOA."
-			aAdd( aLog[1], STR0040 )//"Foi realizado uma tentativa de autentica√ß√£o por usu√°rio e senha."
+			aAdd( aLog[1], STR0037 )//"API Key (Connector Token) inv·lida, verifique se a API Key est· correta ou revogue, gere uma nova API Key e preencha no par‚metro MV_APICLOA."
+			aAdd( aLog[1], STR0040 )//"Foi realizado uma tentativa de autenticaÁ„o por usu·rio e senha."
 			aAdd( aLog[1], "")
 		EndIf
 		If Empty(cRet)
-			aAdd( aLog[1], STR0007)//"N√£o foi poss√≠vel acessar a API Clockin da Carol. "
-			aAdd( aLog[1], STR0026 )//"Verifique se a URL de Endpoint da Carol est√° informada corretamente no par√¢metro MV_APICL01."
+			aAdd( aLog[1], STR0007)//"N„o foi possÌvel acessar a API Clockin da Carol. "
+			aAdd( aLog[1], STR0026 )//"Verifique se a URL de Endpoint da Carol est· informada corretamente no par‚metro MV_APICL01."
 		Else
 			cRetCarol := cRet
 			oErro:fromJSON( cRet )
 			oErro:toJSON( cRet )		
 			If !Empty( oErro:getJSONText( "code" ) ) .And. oErro:getJSONText( "code" ) != "null" .And. ( Empty( oErro:getJSONText( "errorCode" ) ) .Or. oErro:getJSONText( "errorCode" ) == "null")
-				aAdd( aLog[1], STR0034 )//"Verifique se o path de acesso da API da Carol est√° informada corretamente no par√¢metro MV_APICL02."
+				aAdd( aLog[1], STR0034 )//"Verifique se o path de acesso da API da Carol est· informada corretamente no par‚metro MV_APICL02."
 				aAdd( aLog[1], "")
 			EndIf
 			If !Empty( oErro:getJSONText( "errorCode" ) ) .And. oErro:getJSONText( "errorCode" ) != "null" .And. ( Empty( oErro:getJSONText( "code" ) ) .Or. oErro:getJSONText( "code" ) == "null")
 				If oErro:getJSONText( "errorCode" ) == "400" .Or. oErro:getJSONText( "errorCode" ) == "401"
-					aAdd( aLog[1], STR0035 )//"Verifique se o usu√°rio e a senha est√£o informados corretamente nos par√¢metros MV_APICLO4 e MV_APICLO5."
+					aAdd( aLog[1], STR0035 )//"Verifique se o usu·rio e a senha est„o informados corretamente nos par‚metros MV_APICLO4 e MV_APICLO5."
 				ElseIf !Empty( oErro:getJSONText( "errorCode" ) ) .And. oErro:getJSONText( "errorCode" ) == "404" .And. oErro:getJSONText( "possibleResponsibleField" ) == "mdmSubdomain" 
-					aAdd( aLog[1], STR0036 )//"Verifique se o subdom√≠nio e a organiza√ß√£o est√£o informados corretamente nos par√¢metros MV_APICLO6 e MV_APICLO9."
+					aAdd( aLog[1], STR0036 )//"Verifique se o subdomÌnio e a organizaÁ„o est„o informados corretamente nos par‚metros MV_APICLO6 e MV_APICLO9."
 				ElseIf !Empty( oErro:getJSONText( "errorCode" ) ) .And. oErro:getJSONText( "errorCode" ) == "404" .And. oErro:getJSONText( "possibleResponsibleField" ) == "mdmName" 
-					aAdd( aLog[1], "Verifique se o Connector Id preenchido no par√¢metro MV_APICLO3 est√° correto." )//"Verifique se o Connector Id preenchido no par√¢metro MV_APICLO3 est√° correto."
+					aAdd( aLog[1], "Verifique se o Connector Id preenchido no par‚metro MV_APICLO3 est· correto." )//"Verifique se o Connector Id preenchido no par‚metro MV_APICLO3 est· correto."
 				EndIf
 				aAdd( aLog[1], "")
 			EndIf
 			If !Empty( oErro:getJSONText( "errorCode" ) ) .And. oErro:getJSONText( "errorCode" ) != "null"
-				aAdd( aLog[1], STR0027 + oErro:getJSONText( "errorCode" ) )//"C√≥digo do erro retornado pela API: "
+				aAdd( aLog[1], STR0027 + oErro:getJSONText( "errorCode" ) )//"CÛdigo do erro retornado pela API: "
 			EndIf
 			If !Empty( oErro:getJSONText( "code" ) ) .And. oErro:getJSONText( "code" ) != "null"
-				aAdd( aLog[1], STR0027 + oErro:getJSONText( "code" ) )//"C√≥digo do erro retornado pela API: "
+				aAdd( aLog[1], STR0027 + oErro:getJSONText( "code" ) )//"CÛdigo do erro retornado pela API: "
 			EndIf
 			If !Empty( oErro:getJSONText( "errorMessage" ) ) .And. oErro:getJSONText( "errorMessage" ) != "null"
 				aAdd( aLog[1], STR0028 + oErro:getJSONText( "errorMessage" ) )//"Mensagem de erro retornado pela API: "
@@ -825,14 +838,14 @@ If !lApiToken
 				aAdd( aLog[1], STR0028 + oErro:getJSONText( "message" ) )//"Mensagem de erro retornado pela API: "
 			EndIf
 			If !Empty( oErro:getJSONText( "possibleResponsibleField" ) ) .And. oErro:getJSONText( "possibleResponsibleField" ) != "null"
-				aAdd( aLog[1], STR0029 + oErro:getJSONText( "possibleResponsibleField" ) )//"Poss√≠vel campo respons√°vel pelo erro retornado pela API: "
+				aAdd( aLog[1], STR0029 + oErro:getJSONText( "possibleResponsibleField" ) )//"PossÌvel campo respons·vel pelo erro retornado pela API: "
 			EndIf
 			If !Empty( oErro:getJSONText( "applicationErrorCode" ) ) .And. oErro:getJSONText( "applicationErrorCode" ) != "null"
-				aAdd( aLog[1], STR0030 + oErro:getJSONText( "applicationErrorCode" ) )//"C√≥digo do erro retornado pela aplica√ß√£o: "
+				aAdd( aLog[1], STR0030 + oErro:getJSONText( "applicationErrorCode" ) )//"CÛdigo do erro retornado pela aplicaÁ„o: "
 			EndIf
 		EndIf
 		aAdd( aLog[1], "")
-		aAdd( aLog[1], STR0031 )//"Configura√ß√£o dos par√¢metros: "
+		aAdd( aLog[1], STR0031 )//"ConfiguraÁ„o dos par‚metros: "
 		aAdd( aLog[1], "  MV_APICL01: " + aParam[2] )
 		aAdd( aLog[1], "  MV_APICL02: " + aParam[3] )
 		aAdd( aLog[1], "  MV_APICL03: " + aParam[4] )
@@ -885,7 +898,7 @@ EndIf
 Return (aRetorno)
 
 /*/{Protheus.doc} fBuscaParam
-Carregando os par√¢metros
+Carregando os par‚metros
 @author Wesley Alves Pereira
 @since 12/09/2019
 /*/
@@ -927,7 +940,7 @@ aAdd(aParam,lProcIni)
 Return (aParam)
 
 /*/{Protheus.doc} fBuscaNSR
-Busca o c√≥digo NSR do √∫ltimo dispositivo lido.
+Busca o cÛdigo NSR do ˙ltimo dispositivo lido.
 @author Wesley Alves Pereira
 @since 12/09/2019
 /*/
@@ -994,7 +1007,7 @@ nContador++
 Return (cValToChar(nContador))
 
 /*/{Protheus.doc} fValData
-Valida as informa√ß√µes de data passadas por parametro
+Valida as informaÁıes de data passadas por parametro
 @author Wesley Alves Pereira
 @since 12/09/2019
 /*/
@@ -1008,7 +1021,7 @@ EndIf
 Return (lReto)
 
 /*/{Protheus.doc} fTraData
-Transforma uma data no padr√£o da API
+Transforma uma data no padr„o da API
 @author Wesley Alves Pereira
 @since 12/09/2019
 /*/
@@ -1063,7 +1076,7 @@ nContador += 1
 Return (nContador)
 
 /*/{Protheus.doc} fValidaNSR
-Valida se o NSR Informado j√° existe na tabela.
+Valida se o NSR Informado j· existe na tabela.
 @author Wesley Alves Pereira
 @since 19/09/2019
 /*/
@@ -1123,14 +1136,14 @@ Exibe uma mensagem no console quando a rotina for via Schedule.
 Static Function ConsoleJob(cMensagem)
 
 Conout(Replicate("-",30))
-Conout(FwNoAccent(OemToAnsi(STR0013))) //"Execu√ß√£o da Rotina PONAPI01 - Via Schedule"
+Conout(FwNoAccent(OemToAnsi(STR0013))) //"ExecuÁ„o da Rotina PONAPI01 - Via Schedule"
 Conout(FwNoAccent(OemToAnsi(cMensagem)))
 Conout(Replicate("-",30))
 
 Return (.T.)
 
 /*/{Protheus.doc} fTemTab
-Verifica a existencia da tabela de integra√ß√£o.
+Verifica a existencia da tabela de integraÁ„o.
 @author Wesley Alves Pereira
 @since 21/10/2019
 /*/
@@ -1144,7 +1157,7 @@ EndIf
 Return (lReto) 	
 
 /*/{Protheus.doc} fCriaTab
-Realiza a cria√ß√£o da tabela de integra√ß√£o.
+Realiza a criaÁ„o da tabela de integraÁ„o.
 @author Wesley Alves Pereira
 @since 21/10/2019
 /*/
@@ -1236,9 +1249,9 @@ If lTrata
 		cReto := TcSqlError()
 		lReto := .F.
 		If !lWorkFlow
-			Help( ,, 'HELP',, cReto, 1, 0) //Mensagem de erro na Cria√ß√£o da tabela de integra√ß√£o
+			Help( ,, 'HELP',, cReto, 1, 0) //Mensagem de erro na CriaÁ„o da tabela de integraÁ„o
 		Else
-			ConsoleJob(cReto) //Mensagem de erro na Cria√ß√£o da tabela de integra√ß√£o
+			ConsoleJob(cReto) //Mensagem de erro na CriaÁ„o da tabela de integraÁ„o
 		EndIf
 	EndIf
 Else
@@ -1248,7 +1261,7 @@ EndIf
 Return (lReto)
 
 /*/{Protheus.doc} FiltraLog
-//Fun√ß√£o que quebra o texto para grava√ß√£o no log
+//FunÁ„o que quebra o texto para gravaÁ„o no log
 @author paulo.inzonha
 @since 25/07/2019
 @version 1.0
@@ -1276,12 +1289,12 @@ EndIf
 Return( NIL )
 
 /*/{Protheus.doc} fGeraApiTk
-//Fun√ß√£o para gerar o API Token 
+//FunÁ„o para gerar o API Token 
 @author marco.nakazawa
 @since 26/08/2020
 @version 1.0
 @return NIL
-@param URL Carol, Access Token, Conector Id, Organiza√ß√£o
+@param URL Carol, Access Token, Conector Id, OrganizaÁ„o
 @type function
 /*/
 Static Function fGeraApiTk( ccURL, cAccesTokn, cConecId, cOrg)
@@ -1327,7 +1340,7 @@ Default cOrg	:= ""
 Return
 
 /*/{Protheus.doc} fAddMarc
-//Fun√ß√£o para adicionar marca√ß√µes no array para posterior grava√ß√£o 
+//FunÁ„o para adicionar marcaÁıes no array para posterior gravaÁ„o 
 @author allyson.mesashi
 @since 14/01/2021
 @version 1.0
